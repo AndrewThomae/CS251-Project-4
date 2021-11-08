@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-
-public class PartATest 
+public class PartATest
 {
     public static void main(String[] args) 
     {
