@@ -498,7 +498,7 @@ public class Graph
             }
         }
 
-        System.out.println("Made edgeTo");
+        //System.out.println("Made edgeTo");
         for (int i = v; i < n; i++) {
             if (i == v) {
                 continue;
@@ -512,7 +512,7 @@ public class Graph
             }
             list.add(new Edge(codes[v], codes[i], counter));
         }
-        System.out.println("Added to list");
+        //System.out.println("Added to list");
 
         return list;
     }
