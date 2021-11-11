@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RegNet
 {
@@ -65,6 +66,7 @@ public class RegNet
             //If either adjacency list size is 1, then that is the only vertex to become stray
             if (G.adj(u).size() == 1 || G.adj(v).size() == 1) {
                 G.removeEdge(edges.get(i));
+                G = G.connGraph();
 
                 if (G.totalWeight() <= max) {
                     break;
@@ -76,7 +78,22 @@ public class RegNet
 
     //Add edges because it is below max weight
     private static Graph add(Graph G, int max) {
+        String[] vertices = G.getCodes();
+        ArrayList<Edge> addQ = new ArrayList<>();
 
+
+        //Build edge queue
+        for (int i = 0; i < vertices.length; i++) {
+            //Graph temp = G.subgraph(Arrays.copyOfRange(G.getCodes(), i, G.getCodes().length));
+            G.BFS(addQ, i);
+        }
+
+        System.out.println("Testing Possible Edges");
+        for (int i = 0; i < addQ.size(); i++) {
+            System.out.println(addQ.get(i).u + " to " + addQ.get(i).v + " has " + addQ.get(i).w + " stops");
+        }
+
+        System.out.println("Done with that");
         return G;
     }
 }

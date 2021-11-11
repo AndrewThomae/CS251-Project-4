@@ -468,4 +468,52 @@ public class Graph
 	    
         return false;
     }
+
+    public ArrayList<Edge> BFS(ArrayList<Edge> list, int v){
+        boolean visited[] = new boolean[n];
+        int edgeTo[] = new int[n];
+
+        visited[v] = true;
+        edgeTo[v] = v;
+        ArrayList<Integer> q = new ArrayList<>();
+        if (adj(v) == null) {
+            return list;
+        }
+        for (int i = 0; i < adj(v).size(); i++) {
+            q.add(adj(v).get(i));
+            edgeTo[adj(v).get(i)] = v;
+            visited[adj(v).get(i)] = true;
+        }
+
+        while (q.size() != 0) {
+            int curIn = q.get(0);
+            q.remove(0);
+
+            for (int i = 0; i < adj(curIn).size(); i++) {
+                if (!visited[adj(curIn).get(i)]) {
+                    q.add(adj(curIn).get(i));
+                    visited[adj(curIn).get(i)] = true;
+                    edgeTo[adj(curIn).get(i)] = curIn;
+                }
+            }
+        }
+
+        System.out.println("Made edgeTo");
+        for (int i = v; i < n; i++) {
+            if (i == v) {
+                continue;
+            }
+            int curIn = i;
+            int counter = -1;
+
+            while (curIn != v) {
+                curIn = edgeTo[curIn];
+                counter++;
+            }
+            list.add(new Edge(codes[v], codes[i], counter));
+        }
+        System.out.println("Added to list");
+
+        return list;
+    }
 }
