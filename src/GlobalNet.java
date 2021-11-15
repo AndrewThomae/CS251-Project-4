@@ -7,29 +7,48 @@ public class GlobalNet
     //regions: the regional graphs
     public static Graph run(Graph O, Graph[] regions) {
         //Construct the graph
+        Graph G = new Graph(O.V());
+        G.setCodes(O.getCodes());
 
+        for (Graph region : regions) {
+            for (Edge edge : region.edges()) {
+                G.addEdge(edge);
+            }
+        }
+//        System.out.println("Check G");
+//        System.out.println("Graph: " + G.toString());
 
-        //Connect subgraphs
-        for (int i = 0; i < regions.length - 1; i++) {
-            for (int j = i + 1; j < regions.length - 1; j++) {
+        //Connect regions
+        for (int i = 0; i < regions.length; i++) {
+            for (int j = i + 1; j < regions.length; j++) {
                 //biggie[0] is distance array
                 //biggie[1] is previous position array
                 int[][] biggie = regDijkstra(O, regions[i], O.index(regions[i].getCode(0)));
-                int bestPort = Integer.MAX_VALUE;
-                for (int k = 0; k < regions[j].V() - 1; k++) {
-                    if (biggie[0][k] < bestPort) {
-                        bestPort = k;
+                int bestPort = -1;
+                for (String code : regions[j].getCodes()) {
+                    int pos = G.index(code);
+                    if (bestPort == -1) {
+                        bestPort = pos;
+                        continue;
+                    } if (biggie[0][pos] < biggie[0][bestPort]) {
+                        bestPort = pos;
                     }
                 }
 
                 //add edges
                 while (true) {
-                    break;
-                    //O.addEdge(regions[j].getCode(bestPort), regions[j].getCode(biggie[1][bestPort]));
+                    Edge adding = O.getEdge(bestPort ,biggie[1][bestPort]);
+                    G.addEdge(adding);
+                    //System.out.println("Successfully Added: (" + adding.u + ", " + adding.v + ", " + adding.w + ")");
+                    bestPort = biggie[1][bestPort];
+                    if (biggie[1][bestPort] == -1) {
+                        break;
+                    }
                 }
             }
         }
-        return O;
+        G = G.connGraph();
+        return G;
     }
 
 
@@ -40,7 +59,7 @@ public class GlobalNet
         DistQueue q = new DistQueue(G.getCodes().length);
 
         dist[s] = 0;
-        for (int i = 0; i < G.getCodes().length - 1; i++) {
+        for (int i = 0; i < G.getCodes().length; i++) {
             if (i != s) {
                 dist[i] = Integer.MAX_VALUE - 10000000;
             }
@@ -60,6 +79,7 @@ public class GlobalNet
             //If its in the region the distance is 0
             if (inRegion) {
                 dist[u] = 0;
+                prev[u] = -1;
             }
 
             ArrayList<Integer> adj = G.adj(u);
