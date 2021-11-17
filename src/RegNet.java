@@ -117,7 +117,7 @@ public class RegNet
                     dPriority.add(temp);
                 } else {
                     dPriority.sort(new EdgeSort());
-                    for (int j = 0; j < dPriority.size() - 1; j++) {
+                    for (int j = 0; j < dPriority.size(); j++) {
                         if (G.totalWeight() + dPriority.get(j).w <= max) {
                             G.addEdge(dPriority.get(j));
                             //System.out.println("Added edge: " + dPriority.get(j).toString() + ", new weight: " + G.totalWeight());
