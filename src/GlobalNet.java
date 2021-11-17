@@ -20,10 +20,10 @@ public class GlobalNet
 
         //Connect regions
         for (int i = 0; i < regions.length; i++) {
+            int[][] biggie = regDijkstra(O, regions[i], O.index(regions[i].getCode(0)));
             for (int j = i + 1; j < regions.length; j++) {
                 //biggie[0] is distance array
                 //biggie[1] is previous position array
-                int[][] biggie = regDijkstra(O, regions[i], O.index(regions[i].getCode(0)));
                 int bestPort = -1;
                 for (String code : regions[j].getCodes()) {
                     int pos = G.index(code);
@@ -86,13 +86,11 @@ public class GlobalNet
 
 
             for (int vertex : adj) {
-                if (q.inQueue(vertex)) {
                     int d = dist[u] + G.getEdgeWeight(u, vertex);
                     if (d < dist[vertex]) {
                         dist[vertex] = d;
                         prev[vertex] = u;
                         q.set(vertex, d);
-                    }
                 }
             }
         }

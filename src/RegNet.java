@@ -7,7 +7,7 @@ public class RegNet
     //G: the original graph
     //max: the budget
     public static Graph run(Graph G, int max) {
-        System.out.println("MAX WEIGHT: " + max);
+        //System.out.println("MAX WEIGHT: " + max);
         //System.out.println(G.toString());
         Graph original = G;
         G = kruskal(G);
@@ -16,15 +16,16 @@ public class RegNet
 
 
         //Cut and expand the MST
-        System.out.println("Current weight is: " + G.totalWeight());
+        //System.out.println("Current weight is: " + G.totalWeight());
         if (G.totalWeight() > max) {
-            System.out.println("Weight too large!");
+            //System.out.println("Weight too large! Removing vertices...");
             //Keep removing edges until good
             G = cut(G, max);
-            System.out.println("Weight after cut: " + G.totalWeight());
-            System.out.println("Size is: " + G.getCodes().length);
+            //System.out.println("Weight after cut: " + G.totalWeight());
+            //System.out.println("Current MST: \n" + G.toString());
+            //System.out.println("Size is: " + G.getCodes().length);
         } if (G.totalWeight() < max) {
-            System.out.println("Is there possible room for more edges?");
+            //System.out.println("Attempting to add more edges...");
             //Keep adding edges until good
             G = add(original, G, max);
         }
@@ -110,14 +111,16 @@ public class RegNet
             ArrayList<Edge> dPriority = new ArrayList<>();
             for (int i = addQ.size() - 1; i >= 0; i--) {
                 if (addQ.get(i).w == maxStop) {
-                    int u = G.index(addQ.get(i).u);
-                    int v = G.index(addQ.get(i).v);
-                    dPriority.add(new Edge(addQ.get(i).u, addQ.get(i).v, original.getEdgeWeight(u, v)));
+                    String u = addQ.get(i).u;
+                    String v = addQ.get(i).v;
+                    Edge temp = new Edge(addQ.get(i).u, addQ.get(i).v, original.getEdgeWeight(original.index(u), original.index(v)));
+                    dPriority.add(temp);
                 } else {
                     dPriority.sort(new EdgeSort());
                     for (int j = 0; j < dPriority.size() - 1; j++) {
                         if (G.totalWeight() + dPriority.get(j).w <= max) {
                             G.addEdge(dPriority.get(j));
+                            //System.out.println("Added edge: " + dPriority.get(j).toString() + ", new weight: " + G.totalWeight());
                         }
                     }
                     i++;

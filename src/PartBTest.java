@@ -41,7 +41,7 @@ public class PartBTest
 
 	    boolean match = true;
 	    System.out.println("Checking if graph is correct...");
-	    
+//
 //        if(act.size() != exp.size())
 //        {
 //	        printMsg1(exp.size(), act.size());
@@ -53,7 +53,7 @@ public class PartBTest
             {
 		        if(!act.get(i).equals(exp.get(i))) 
                 {
-		            printMsg4(i, act.get(i), exp.get(i));
+		            printMsg4(i, exp.get(i), act.get(i));
 		            match = false;
 		            break;
 		        }
